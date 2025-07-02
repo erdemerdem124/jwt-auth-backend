@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-r3&+3rzus#c_&w&#+(orej92g^=y8*de$@ju!zmm-=gpd(cebv')# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1', 'jwt-auth-backend-api.onrender.com'] # Kendi tam URL'inizi buraya yazın
 
 # ==============================================================================
 # BÜTÜN ALLAUTH VE SİTE AYARLARI BURADA BAŞLAR
