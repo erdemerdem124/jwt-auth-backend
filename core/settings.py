@@ -225,6 +225,8 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://jwt-auth-frontend-fib7.onrender.com", # FRONTEND'İNİZİN CANLI RENDER URL'İ
+
 ]
 
 CORS_ALLOW_CREDENTIALS = True
