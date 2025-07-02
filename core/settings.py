@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
+import dj_database_url
 from pathlib import Path
 from datetime import timedelta
 
@@ -21,12 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-r3&+3rzus#c_&w&#+(orej92g^=y8*de$@ju!zmm-=gpd(cebv'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-r3&+3rzus#c_&w&#+(orej92g^=y8*de$@ju!zmm-=gpd(cebv')# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 
 # ==============================================================================
 # BÜTÜN ALLAUTH VE SİTE AYARLARI BURADA BAŞLAR
@@ -72,6 +71,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Application definition
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic', # BU SATIRI EN ÜSTE EKLEYİN
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -97,6 +97,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # BU SATIRI EKLEYİN
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -131,10 +132,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'), # Render bu ortam değişkenini otomatik sağlar
+        conn_max_age=600, # Bağlantı ömrü
+        ssl_require=True # SSL bağlantısı gerektir
+    )
 }
 
 
@@ -173,6 +175,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles' # BU SATIRI EKLEYİN
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # BU SATIRI EKLEYİN
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
